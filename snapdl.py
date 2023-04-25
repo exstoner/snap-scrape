@@ -36,6 +36,11 @@ def snapStory_downloader(url):
         media_url = link['snapUrls']['mediaUrl']
         links.append(media_url)
 
+    # Create clips directory if it doesn't exist
+    dir_path = 'clips'
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
     # Enumerate through the list of link and download each video
     for i, url in enumerate(links):
         file_name = 'clips/clip{}.mp4'.format(i)
@@ -59,7 +64,14 @@ def concatenate_videos(dir_path, video_name):
         video_path = os.path.join(dir_path, video)
         clip = mp.VideoFileClip(video_path)
         clips.append(clip)
+    
     # Concatenate the clips and create the final video
+
+    # Create export directory if it doesn't exist
+    dir_path = 'export'
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+    
     final_video = mp.concatenate_videoclips(clips, method="compose")
     final_video.write_videofile(f"export/{video_name}.mp4",audio_codec='aac')
 
@@ -68,7 +80,7 @@ def concatenate_videos(dir_path, video_name):
 
 url = input('Enter the SnapStory URL : ')
 video_name = snapStory_downloader(url)
-dir_path = "/Users/xxxx/Downloads/scrap-snap/clips"
+dir_path = "/Users/xxxx/Downloads/snapscrape/clips"
 
 if snapStory_downloader(url):
     concatenate_videos(dir_path, video_name)
